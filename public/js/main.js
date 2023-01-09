@@ -12,9 +12,56 @@
      }
  });
 
-
  $('.datepicker').datetimepicker({
      format: 'YYYY-MM-DD',
+     icons: {
+         time: "fa fa-clock-o",
+         date: "fa fa-calendar",
+         up: "fa fa-chevron-up",
+         down: "fa fa-chevron-down",
+         previous: 'fa fa-chevron-left',
+         next: 'fa fa-chevron-right',
+         today: 'fa fa-screenshot',
+         clear: 'fa fa-trash',
+         close: 'fa fa-remove',
+         ignoreReadonly: true
+     }
+ });
+
+ var _usedate = function() {
+     $('.date').datetimepicker({
+         format: 'YYYY-MM-DD',
+         icons: {
+             time: "fa fa-clock-o",
+             date: "fa fa-calendar",
+             up: "fa fa-chevron-up",
+             down: "fa fa-chevron-down",
+             previous: 'fa fa-chevron-left',
+             next: 'fa fa-chevron-right',
+             today: 'fa fa-screenshot',
+             clear: 'fa fa-trash',
+             close: 'fa fa-remove'
+         }
+     });
+ }
+
+ $('.year').datetimepicker({
+     format: 'YYYY',
+     icons: {
+         time: "fa fa-clock-o",
+         date: "fa fa-calendar",
+         up: "fa fa-chevron-up",
+         down: "fa fa-chevron-down",
+         previous: 'fa fa-chevron-left',
+         next: 'fa fa-chevron-right',
+         today: 'fa fa-screenshot',
+         clear: 'fa fa-trash',
+         close: 'fa fa-remove'
+     }
+ });
+
+ $('.month').datetimepicker({
+     format: 'MM',
      icons: {
          time: "fa fa-clock-o",
          date: "fa fa-calendar",
@@ -64,11 +111,42 @@
 
  };
 
+ $(document).on('keypress', 'input.input_number', function(event) {
+     var is_decimal = $(this).data('decimal');
+
+     if (is_decimal == 0) {
+         if (__currency_decimal_separator == '.') {
+             var regex = new RegExp(/^[0-9,-]+$/);
+         } else {
+             var regex = new RegExp(/^[0-9.-]+$/);
+         }
+     } else {
+         var regex = new RegExp(/^[0-9.,-]+$/);
+     }
+
+     var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+     if (!regex.test(key)) {
+         event.preventDefault();
+         return false;
+     }
+ });
+
+
+ var _useselect2 = function() {
+     $('.select2').select2();
+
+ }
 
  $('.select').select2();
 
- $('.dropify').dropify();
- CKEDITOR.replace('editor1');
+ if ($('.dropify').length > 0) {
+
+     $('.dropify').dropify();
+ }
+ if ($("#editor1").length > 0) {
+
+     CKEDITOR.replace('editor1');
+ }
 
 
 
@@ -105,6 +183,8 @@
                      }
                  });
 
+                 error_audio();
+
              } else {
 
                  $.notify({
@@ -128,6 +208,12 @@
                          window.location.href = data.goto;
                      }, 2500);
                  }
+                 if (data.load) {
+                     setTimeout(function() {
+
+                         window.location.href = "";
+                     }, 2500);
+                 }
                  if (data.window) {
                      window.open(data.window, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=auto,left=auto,width=700,height=400");
                      setTimeout(function() {
@@ -141,6 +227,8 @@
                          window.location.href = data.back;
                      }, 1000);
                  }
+
+                 success_audio();
              }
          },
          error: function(data) {
@@ -168,6 +256,7 @@
 
                      i++;
                  });
+                 error_audio();
              } else {
 
                  $.notify({
@@ -182,7 +271,7 @@
                          align: 'right'
                      }
                  });
-
+                 error_audio();
              }
              $('#submit').show();
              $('#submiting').hide();
@@ -223,6 +312,8 @@
                  setTimeout(function() {
                      window.location.href = data.goto;
                  }, 2000);
+
+                 success_audio();
              },
              error: function(data) {
                  var jsonValue = $.parseJSON(data.responseText);
@@ -255,6 +346,7 @@
      $('#modal_remote').modal('toggle');
      // it will get action url
      var url = $(this).data('url');
+     var title = $(this).data("title");
      // leave it blank before ajax call
      $('.modal-body').html('');
      // load ajax loader
@@ -265,12 +357,20 @@
              dataType: 'html'
          })
          .done(function(data) {
-
+             $('#modal_remote .modal-title').html(title);
              $('.modal-body').html(data).fadeIn(); // load response
              $('#modal-loader').hide();
-             $('.select').select2();
-             $('.dropify').dropify();
-              CKEDITOR.replace('editor1');
+             if ($('.modal-body').find('select').select2().length > 0) {
+                 $('.select').select2();
+             }
+             if ($('.dropify').length > 0) {
+
+                 $('.dropify').dropify();
+             }
+             if ($("#editor1").length > 0) {
+
+                 CKEDITOR.replace('editor1');
+             }
              _componentModalDatePicker();
              _modalFormValidation();
          })
@@ -320,7 +420,7 @@
                              align: 'right'
                          }
                      });
-
+                     warning_audio();
 
                  } else {
                      $.notify({
@@ -338,19 +438,22 @@
                      $('#submit').show();
                      $('#submiting').hide();
                      $('#modal_remote').modal('toggle');
+                     $('#clientModal').modal('hide');
                      if (data.goto) {
                          setTimeout(function() {
 
                              window.location.href = data.goto;
-                         }, 2500);
+                         }, 500);
                      }
 
                      if (data.load) {
                          setTimeout(function() {
 
                              window.location.href = "";
-                         }, 2500);
+                         }, 500);
                      }
+
+                     success_audio();
 
                  }
              },
@@ -388,6 +491,7 @@
                          });
                          i++;
                      });
+                     error_audio();
                  } else {
                      $.notify({
                          icon: "nc-icon nc-app",
@@ -402,7 +506,7 @@
                          }
                      });
 
-
+                     error_audio();
                  }
                  $('#submit').show();
                  $('#submiting').hide();
@@ -428,6 +532,7 @@
      e.preventDefault();
      $('#submit').hide();
      $('#submiting').show();
+     $('.pageloader').show();
      $(".ajax_error").remove();
      var submit_url = $('#content_form').attr('action');
      //Start Ajax
@@ -454,7 +559,7 @@
                          align: 'right'
                      }
                  });
-
+                 warning_audio();
              } else {
                  $.notify({
                      icon: "nc-icon nc-app",
@@ -470,6 +575,7 @@
                  });
                  $('#submit').show();
                  $('#submiting').hide();
+                 $('.pageloader').hide();
                  $('#content_form')[0].reset();
                  if (data.goto) {
                      setTimeout(function() {
@@ -492,6 +598,8 @@
                          window.location.href = "";
                      }, 2500);
                  }
+
+                 success_audio();
              }
          },
          error: function(data) {
@@ -519,6 +627,7 @@
 
                      i++;
                  });
+                 error_audio();
              } else {
 
                  $.notify({
@@ -533,10 +642,142 @@
                          align: 'right'
                      }
                  });
-
+                 error_audio();
              }
              $('#submit').show();
              $('#submiting').hide();
+             $('.pageloader').hide();
+         }
+     });
+ });
+
+ if ($('#ajax_id').length > 0) {
+     $('#ajax_id').parsley().on('field:validated', function() {
+         var ok = $('.parsley-error').length === 0;
+         $('.bs-callout-info').toggleClass('hidden', !ok);
+         $('.bs-callout-warning').toggleClass('hidden', ok);
+     });
+ }
+ $('#ajax_id').on('submit', function(e) {
+
+     e.preventDefault();
+     $('#submit').hide();
+     $('#submiting').show();
+     $('.pageloader').show();
+     $(".ajax_error").remove();
+     var submit_url = $('#ajax_id').attr('action');
+     //Start Ajax
+     var formData = new FormData($("#ajax_id")[0]);
+     $.ajax({
+         url: submit_url,
+         type: 'POST',
+         data: formData,
+         contentType: false, // The content type used when sending data to the server.
+         cache: false, // To unable request pages to be cached
+         processData: false,
+         dataType: 'JSON',
+         success: function(data) {
+             if (data.status == 'danger') {
+                 $.notify({
+                     icon: "nc-icon nc-app",
+                     message: data.message
+
+                 }, {
+                     type: type[3],
+                     timer: 8000,
+                     placement: {
+                         from: 'top',
+                         align: 'right'
+                     }
+                 });
+                 warning_audio();
+             } else {
+                 $.notify({
+                     icon: "nc-icon nc-app",
+                     message: data.message
+
+                 }, {
+                     type: type[2],
+                     timer: 8000,
+                     placement: {
+                         from: 'top',
+                         align: 'right'
+                     }
+                 });
+                 $('#submit').show();
+                 $('#submiting').hide();
+                 $('.pageloader').hide();
+                 $('#ajax_id')[0].reset();
+                 if (data.goto) {
+                     setTimeout(function() {
+
+                         window.location.href = data.goto;
+                     }, 2500);
+                 }
+
+                 if (data.window) {
+                     $('#ajax_id')[0].reset();
+                     window.open(data.window, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=auto,left=auto,width=700,height=400");
+                     setTimeout(function() {
+                         window.location.href = '';
+                     }, 1000);
+                 }
+
+                 if (data.load) {
+                     setTimeout(function() {
+
+                         window.location.href = "";
+                     }, 2500);
+                 }
+
+                 success_audio();
+             }
+         },
+         error: function(data) {
+             var jsonValue = $.parseJSON(data.responseText);
+             const errors = jsonValue.errors;
+             if (errors) {
+                 var i = 0;
+                 $.each(errors, function(key, value) {
+                     const first_item = Object.keys(errors)[i]
+                     const message = errors[first_item][0]
+                     $('#' + first_item).after('<div class="ajax_error" style="color:red">' + value + '</div');
+
+                     $.notify({
+                         icon: "nc-icon nc-app",
+                         message: value
+
+                     }, {
+                         type: type[4],
+                         timer: 8000,
+                         placement: {
+                             from: 'top',
+                             align: 'right'
+                         }
+                     });
+
+                     i++;
+                 });
+                 error_audio();
+             } else {
+
+                 $.notify({
+                     icon: "nc-icon nc-app",
+                     message: jsonValue.message
+
+                 }, {
+                     type: type[4],
+                     timer: 8000,
+                     placement: {
+                         from: 'top',
+                         align: 'right'
+                     }
+                 });
+                 error_audio();
+             }
+             $('#submit').show();
+             $('#submiting').hide();
+             $('.pageloader').hide();
          }
      });
  });
@@ -582,6 +823,7 @@
                                  align: 'right'
                              }
                          });
+                         warning_audio();
                      } else {
                          $.notify({
                              icon: "nc-icon nc-app",
@@ -615,6 +857,8 @@
                                  window.location.href = "";
                              }, 500);
                          }
+
+                         success_audio();
                      }
 
                  },
@@ -638,8 +882,9 @@
                          });
                          i++;
                      });
-
+                     error_audio();
                  }
+
              });
          } else {
              swal("Cancelled", "Your imaginary file is safe :)", "error");
@@ -702,7 +947,7 @@
                              window.location.href = "";
                          }, 500);
                      }
-
+                     success_audio();
                  },
                  error: function(data) {
                      var jsonValue = $.parseJSON(data.responseText);
@@ -724,6 +969,7 @@
                              });
                              i++;
                          });
+                         error_audio();
                      } else {
                          $.notify({
                              icon: "nc-icon nc-app",
@@ -737,12 +983,315 @@
                                  align: 'right'
                              }
                          });
+                         error_audio();
                      }
 
                  }
              });
          } else {
              swal("Cancelled", "Your imaginary file is safe :)", "error");
+         }
+     });
+ });
+
+
+ //remort product
+ var _remortModalForm = function() {
+     if ($('#remort_add').length > 0) {
+         $('#remort_add').parsley().on('field:validated', function() {
+             var ok = $('.parsley-error').length === 0;
+             $('.bs-callout-info').toggleClass('hidden', !ok);
+             $('.bs-callout-warning').toggleClass('hidden', ok);
+         });
+     }
+     $('#remort_add').on('submit', function(e) {
+
+         e.preventDefault();
+         $(".ajax_error").remove();
+         var submit_url = $('#remort_add').attr('action');
+         //Start Ajax
+         var formData = new FormData($("#remort_add")[0]);
+         $.ajax({
+             url: submit_url,
+             type: 'POST',
+             data: formData,
+             contentType: false, // The content type used when sending data to the server.
+             cache: false, // To unable request pages to be cached
+             processData: false,
+             dataType: 'JSON',
+             success: function(result) {
+                 success_audio();
+
+                 $('select#product_id').append(
+                     $('<option>', {
+                         value: result.data.id,
+                         text: result.data.name
+                     })
+                 );
+                 $('select#product_id')
+                     .val(result.data.id)
+                     .trigger('change');
+                 $('div#modal_remote').modal('hide');
+             },
+             error: function(data) {
+                 var jsonValue = $.parseJSON(data.responseText);
+                 const errors = jsonValue.errors;
+                 if (errors) {
+                     var i = 0;
+                     $.each(errors, function(key, value) {
+                         const first_item = Object.keys(errors)[i]
+                         const message = errors[first_item][0]
+                         $('#' + first_item).after('<div class="ajax_error" style="color:red">' + value + '</div');
+                         $("#error_validation").text(value);
+                         $.notify({
+                             icon: "nc-icon nc-app",
+                             message: value
+
+                         }, {
+                             type: type[4],
+                             timer: 8000,
+                             placement: {
+                                 from: 'top',
+                                 align: 'right'
+                             }
+                         });
+
+                         i++;
+                     });
+                     error_audio();
+                 } else {
+
+                     $.notify({
+                         icon: "nc-icon nc-app",
+                         message: jsonValue.message
+
+                     }, {
+                         type: type[4],
+                         timer: 8000,
+                         placement: {
+                             from: 'top',
+                             align: 'right'
+                         }
+                     });
+                     error_audio();
+                 }
+             }
+         });
+     });
+ };
+
+  //remort product Model
+ var _remortNewProductModelForm = function() {
+     if ($('#remort_add').length > 0) {
+         $('#remort_add').parsley().on('field:validated', function() {
+             var ok = $('.parsley-error').length === 0;
+             $('.bs-callout-info').toggleClass('hidden', !ok);
+             $('.bs-callout-warning').toggleClass('hidden', ok);
+         });
+     }
+     $('#remort_add').on('submit', function(e) {
+
+         e.preventDefault();
+         $(".ajax_error").remove();
+         var submit_url = $('#remort_add').attr('action');
+         //Start Ajax
+         var formData = new FormData($("#remort_add")[0]);
+         $.ajax({
+             url: submit_url,
+             type: 'POST',
+             data: formData,
+             contentType: false, // The content type used when sending data to the server.
+             cache: false, // To unable request pages to be cached
+             processData: false,
+             dataType: 'JSON',
+             success: function(result) {
+                 success_audio();
+                 $('select#part_id').append(
+                     $('<option>', {
+                         value: result.data.id,
+                         text: result.data.name
+                     })
+                 );
+                 $('select#product_id')
+                     .val(result.data.product_id)
+                     .trigger('change');
+                 $('div#modal_remote').modal('hide');
+             },
+             error: function(data) {
+                 var jsonValue = $.parseJSON(data.responseText);
+                 const errors = jsonValue.errors;
+                 if (errors) {
+                     var i = 0;
+                     $.each(errors, function(key, value) {
+                         const first_item = Object.keys(errors)[i]
+                         const message = errors[first_item][0]
+                         $('#' + first_item).after('<div class="ajax_error" style="color:red">' + value + '</div');
+                         $("#error_validation").text(value);
+                         $.notify({
+                             icon: "nc-icon nc-app",
+                             message: value
+
+                         }, {
+                             type: type[4],
+                             timer: 8000,
+                             placement: {
+                                 from: 'top',
+                                 align: 'right'
+                             }
+                         });
+
+                         i++;
+                     });
+                     error_audio();
+                 } else {
+
+                     $.notify({
+                         icon: "nc-icon nc-app",
+                         message: jsonValue.message
+
+                     }, {
+                         type: type[4],
+                         timer: 8000,
+                         placement: {
+                             from: 'top',
+                             align: 'right'
+                         }
+                     });
+                     error_audio();
+                 }
+             }
+         });
+     });
+ };
+
+ /*
+  * Form Validation
+  */
+
+ if ($('#client_form').length > 0) {
+     $('#client_form').parsley().on('field:validated', function() {
+         var ok = $('.parsley-error').length === 0;
+         $('.bs-callout-info').toggleClass('hidden', !ok);
+         $('.bs-callout-warning').toggleClass('hidden', ok);
+     });
+ }
+
+ $('#client_form').on('submit', function(e) {
+
+     e.preventDefault();
+     $('#submit').hide();
+     $(".ajax_error").remove();
+     var submit_url = $('#client_form').attr('action');
+     //Start Ajax
+     var formData = new FormData($("#client_form")[0]);
+     $.ajax({
+         url: submit_url,
+         type: 'POST',
+         data: formData,
+         contentType: false, // The content type used when sending data to the server.
+         cache: false, // To unable request pages to be cached
+         processData: false,
+         dataType: 'JSON',
+         success: function(data) {
+             if (data.status == 'danger') {
+                 $.notify({
+                     icon: "nc-icon nc-app",
+                     message: data.message
+
+                 }, {
+                     type: type[3],
+                     timer: 8000,
+                     placement: {
+                         from: 'top',
+                         align: 'right'
+                     }
+                 });
+
+             } else {
+                 $.notify({
+                     icon: "nc-icon nc-app",
+                     message: data.message
+
+                 }, {
+                     type: type[2],
+                     timer: 8000,
+                     placement: {
+                         from: 'top',
+                         align: 'right'
+                     }
+                 });
+                 $('#submit').show();
+                 $('#submiting').hide();
+                 $("#clientModal").modal('toggle');
+                 if (data.goto) {
+                     setTimeout(function() {
+
+                         window.location.href = data.goto;
+                     }, 2500);
+                 }
+
+                 if (data.window) {
+                     $('#content_form')[0].reset();
+                     window.open(data.window, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=auto,left=auto,width=700,height=400");
+                     setTimeout(function() {
+                         window.location.href = '';
+                     }, 1000);
+                 }
+
+                 if (data.load) {
+                     setTimeout(function() {
+
+                         window.location.href = "";
+                     }, 2500);
+                 }
+             }
+             success_audio();
+         },
+         error: function(data) {
+             var jsonValue = $.parseJSON(data.responseText);
+             const errors = jsonValue.errors;
+             if (errors) {
+                 var i = 0;
+                 $.each(errors, function(key, value) {
+                     const first_item = Object.keys(errors)[i]
+                     const message = errors[first_item][0]
+                     $('#' + first_item).after('<div class="ajax_error" style="color:red">' + value + '</div');
+
+                     $.notify({
+                         icon: "nc-icon nc-app",
+                         message: value
+
+                     }, {
+                         type: type[4],
+                         timer: 8000,
+                         placement: {
+                             from: 'top',
+                             align: 'right'
+                         }
+                     });
+
+                     i++;
+                 });
+                 error_audio();
+             } else {
+
+                 $.notify({
+                     icon: "nc-icon nc-app",
+                     message: jsonValue.message
+
+                 }, {
+                     type: type[4],
+                     timer: 8000,
+                     placement: {
+                         from: 'top',
+                         align: 'right'
+                     }
+                 });
+                 error_audio();
+             }
+             $('#submit').show();
+             $('#submiting').hide();
+             $('.pageloader').hide();
          }
      });
  });

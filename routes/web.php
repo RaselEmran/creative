@@ -10,12 +10,12 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::group(['middleware' => ['install']], function () {
 Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+Auth::routes(['register' => false]);
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'admin', 'middleware' => ['auth']], function () {
 
 	 Route::any('setting','SettingController@index')->name('setting');
@@ -46,3 +46,15 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'admin', 'mi
  });
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+});
+
+
+/*::::::::::::::::::::install::::::::::::::::::*/
+Route::get('/installs', 'Install\InstallController@index');
+Route::get('install/database', 'Install\InstallController@database');
+Route::post('install/process_install', 'Install\InstallController@process_install');
+Route::get('install/create_user', 'Install\InstallController@create_user');
+Route::post('install/store_user', 'Install\InstallController@store_user');
+Route::get('install/system_settings', 'Install\InstallController@system_settings');
+Route::post('install/finish', 'Install\InstallController@final_touch'); 

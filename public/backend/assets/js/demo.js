@@ -562,5 +562,34 @@ demo = {
     }
 
 
-
 }
+
+var success_audio =function(){
+     var audio = $('#success-audio')[0];
+            if (audio !== undefined) {
+                audio.play();
+            }
+}
+
+var error_audio =function(){
+     var audio = $('#error-audio')[0];
+            if (audio !== undefined) {
+                audio.play();
+            }
+}
+
+var warning_audio =function(){
+     var audio = $('#warning-audio')[0];
+            if (audio !== undefined) {
+                audio.play();
+            }
+}
+
+var append_audio =function(){
+     var audio = $('#append-audio')[0];
+            if (audio !== undefined) {
+                audio.play();
+            }
+}
+
+

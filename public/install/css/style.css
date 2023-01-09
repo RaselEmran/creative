@@ -1,0 +1,55 @@
+body{
+	margin: 0;
+	padding: 0;
+	font-family: 'Montserrat', sans-serif;
+	background: rgb(14, 58, 158);
+	background: -webkit-linear-gradient(to right, rgba(14, 58, 158, 1), rgba(237, 111, 99, 1)); 
+	background: linear-gradient(to right, rgba(14, 58, 158, 1), rgba(237, 111, 99, 1)); 
+}
+
+.container{  
+  height: 100%;
+  display: grid; 
+}
+
+.install-container{
+	margin: auto;
+	margin-top:100px;
+}
+
+.panel-default {
+    border-radius: 0px;
+}
+
+.panel-default>.panel-heading {
+    color: #FFF;
+    background-color: green;
+    border-color: #ddd;
+}
+
+.btn-install{
+	background: transparent;
+	margin-top: 15px;
+	border:2px solid #0984e3;
+	color: #0984e3;
+	font-size:16px;
+	border-radius:0px;
+	transition: 0.5s ease all;
+	padding: 6px 20px;
+}
+
+.btn-install:hover{
+	background: #0984e3;
+	color: #FFF;
+}
+
+p.required{
+	color: #d63031;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.form-control:focus{
+	outline: none !important;
+	border: 1px solid #0984e3;
+}

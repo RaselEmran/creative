@@ -1,54 +1,57 @@
 
-
-
 @extends('layouts.app')
 
 @section('content')
-        <!-- End Navbar -->
-        <div class="full-page  section-image" data-color="black" data-image="{{asset('backend/assets/img/full-screen-image-2.jpg') }}" ;>
-            <!--   you can change the color of the filter page using: data-color="blue | purple | green | orange | red | rose " -->
-            <div class="content">
-                <div class="container">
-                    <div class="col-md-4 col-sm-6 ml-auto mr-auto">
-                        <form class="form" method="post" action="{{ route('login') }}" id="login">
-                            <div class="card card-login card-hidden">
-                                <div class="card-header ">
-                                    <h3 class="header text-center">Login</h3>
-                                </div>
-                                <div class="card-body ">
-                                    <div class="card-body">
-                                        <div class="form-group">
-                                            <label>Email address</label>
-                                            <input type="email" name="email" id="email" placeholder="Enter email" class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Password</label>
-                                            <input type="password" name="password" id="password" placeholder="Password" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer ml-auto mr-auto">
-                                    <button type="submit" class="btn btn-warning btn-wd">Login</button>
-                         
-                                </div>
-                                <div>
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+<div class="container ">
+    <div class="row">
+        <div class="col-md-6 pb-3  pt-5  px-5 mx-auto text-center  text-white mt-0 mt-sm-5 bg-color">
+
+            @if (setting('logo'))
+            <img src="{{asset('storage/logo/'.setting('logo'))}}" alt="Logo"
+                style="width:150px; height:150px; border-radius:50%;">
+            @else
+            <div class="border rounded-circle d-inline-block">
+                <p class="display-2 mt-4 mr-5"> <i class="fa fa-user"></i> </p>
             </div>
+            @endif
+            <div class="mt-3 mt-sm-5 mx-0 mx-sm-2">
+                <form action="{{ route('login') }}" method="post" id="login">
+                    <div class="form-group row no-gutters">
+                        <label for="email" class="col-2 col-form-label"> <i class="fa fa-address-card" aria-hidden="true"></i> </label>
+                        <div class="col-10">
+                            <input type="text" class="form-control" id="email" name="email" placeholder="Email" autofocus>
+                        </div>
+                    </div>
+                    <div class="form-group row no-gutters">
+                        <label for="password" class="col-2 col-form-label"> <i class="fa fa-unlock-alt" aria-hidden="true"></i> </label>
+                        <div class="col-10">
+                            <input type="password" class="form-control" name="password" id="password"  autocomplete="password" placeholder="Password">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block"
+                            id="submit">{{ _lang('Sign in') }}</button>
+                    </div>
+                     <div class="text-center">
+                    @if (Route::has('password.request'))
+                    <a class="btn btn-link" href="{{ route('password.request') }}">
+                        {{ __('Forgot Your Password?') }}
+                    </a>
+                    @endif
+                </div>
+                </form>
+            </div>
+            <br>
+            <br>
+         {{--    <div class="mt-3 mt-sm-5">
+                <p class="font-weight-bold"> Powered by <a href="https://sattit.com/" class="text-light"> SATT IT </a>
+                </p>
+            </div> --}}
         </div>
+    </div>
+</div>
 @endsection
 @push('js')
 <script src="{{ asset('js/login.js') }}"></script>
-<script>
-    console.log(Math.floor((Math.random() * 4) + 1));
-</script>
 @endpush
 

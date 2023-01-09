@@ -483,6 +483,9 @@
                     wordSpace = Math.ceil(textLength / 5),
                     size = textLength + wordSpace + 1;
                 $input.attr('size', Math.max(this.inputSize, $input.val().length));
+                if (event.which == 13) {
+                  return false; // dont submit form !!
+                 }
             }, self));
 
             // Remove icon clicked

@@ -30,6 +30,7 @@
 
                  window.location.href = data.goto;
              }, 2500);
+             success_audio();
          },
          error: function(data) {
              $("#loader").hide();
@@ -56,6 +57,7 @@
 
                  i++;
              });
+            error_audio();
          }
 
      });
